@@ -11,7 +11,11 @@
 		<form v-on:submit.prevent="submit">
 			<h2>Cursos favoritos</h2>
 			<template v-for="curso in cursos">
-				<curso :curso="curso" :cursos-seleccionados="cursosSeleccionados"></curso>
+				<!--
+					selectCurso -> Nombre del metodo que queremos llamar dentro del componente.
+					v-on: @
+				-->
+				<curso :curso="curso" @checked="selectCurso"></curso>
 			</template>
 
 			<button type="submit">Enviar</button>
@@ -27,10 +31,20 @@
 			/**
 			 * Propiedades que necesita el elemento para dibujarse.
 			 */
-			props: ['curso', 'cursosSeleccionados'],
+			props: ['curso'],
+			methods: {
+				onchange: function(e){
+					/**
+					 * checked => Nombre del evento.
+					 * this.curso.value => Valor del curso.
+					 * e.target.checked => Devuelve TRUE o FALSE.
+					 */
+					this.$emit('checked', this.curso.value, e.target.checked)
+				}
+			},
 			template: `
 				<div>
-					<input v-model="cursosSeleccionados" type="checkbox" v-bind:id="curso.value" v-bind:value="curso.value">
+					<input type="checkbox" v-bind:id="curso.value" v-bind:value="curso.value" v-on:change="onchange">
 					<label v-bind:for="curso.value">{{ curso.nombre }}</label>
 				</div>
 			`
@@ -63,6 +77,14 @@
 				submit: function(){
 					console.log(`Realizando el Submit`)
 					console.log(this.cursosSeleccionados)
+				},
+				selectCurso: function(curso, checked){
+					if(checked){
+						this.cursosSeleccionados.push(curso)
+					}else{
+						let index = this.cursosSeleccionados.indexOf(curso)
+						this.cursosSeleccionados.splice(index, 1)
+					}
 				}
 			}
 		})
