@@ -11,7 +11,7 @@
 		<form v-on:submit.prevent="submit">
 			<h2>Cursos favoritos</h2>
 			<template v-for="curso in cursos">
-				<curso :curso="curso" :cursosSeleccionados="cursosSeleccionados"></curso>
+				<curso :curso="curso" :cursos-seleccionados="cursosSeleccionados"></curso>
 			</template>
 
 			<button type="submit">Enviar</button>
